@@ -14,10 +14,10 @@ public class ReadOnlyVariable<Element> {
     }
 
     // MARK: Internal properties
-    internal let readWrite: Variable<Element>
+    internal let readWrite: BehaviorRelay<Element>
 
     // MARK: Lifecycle
-    public init(_ variable: Variable<Element>) {
+    public init(_ variable: BehaviorRelay<Element>) {
         self.readWrite = variable
     }
 
@@ -27,11 +27,5 @@ public class ReadOnlyVariable<Element> {
      */
     public func asObservable() -> RxSwift.Observable<Element> {
         return readWrite.asObservable()
-    }
-}
-
-extension Variable {
-    public func readOnly() -> ReadOnlyVariable<Element> {
-        return ReadOnlyVariable(self)
     }
 }

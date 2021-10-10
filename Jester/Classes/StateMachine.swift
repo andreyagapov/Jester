@@ -1,5 +1,6 @@
 import Foundation
 import RxSwift
+import RxCocoa
 
 public enum StateTransitionResult<State> {
     case Success(old: State, new: State, input: AnyInput)
@@ -27,7 +28,7 @@ public struct StateTransitionError<State>: Swift.Error, CustomDebugStringConvert
 public class StateMachine<State> {
 
     // MARK: Public properties
-    public let currentState: ReadOnlyVariable<State>
+    public let currentState: BehaviorRelay<State>
     public let transitionResult: Observable<StateTransitionResult<State>>
 
     // MARK: Private properties
@@ -42,7 +43,7 @@ public class StateMachine<State> {
     }
 
     public init(initialState: State, stateMapping: [String: [MappedStateTransition<State>]]) {
-        self.currentState = Variable(initialState).readOnly()
+        self.currentState = BehaviorRelay(value: initialState)
         self.mappedStateTransitions = stateMapping
 
         self.transitionResultSubject = PublishSubject()
@@ -68,7 +69,7 @@ public class StateMachine<State> {
         let transition: StateTransition<State> = stateTransitionMap.erasedTransition.stateTransition
         do {
             let effect = try stateTransitionMap.effectWithArguments(input.argument, self)
-            self.currentState.readWrite.value = transition.nextState
+            self.currentState.accept(transition.nextState)
             transitionResultSubject.onNext(.Success(old: currentState, new: transition.nextState, input: input))
             effect()
 
