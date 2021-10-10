@@ -33,6 +33,6 @@ Jester is a pure swift state machine with a little bit of an Rx flavor.
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   # s.frameworks = 'UIKit', 'MapKit'
-  s.dependency 'RxSwift', '~> 4.0'
+  s.dependency 'RxSwift', '~> 6.0'
 end
 
