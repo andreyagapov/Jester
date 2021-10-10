@@ -1,4 +1,5 @@
 import RxSwift
+import RxCocoa
 
 public class ReadOnlyVariable<Element> {
 
